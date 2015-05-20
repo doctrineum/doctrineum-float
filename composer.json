@@ -1,0 +1,21 @@
+{
+  "name": "doctrineum/float",
+  "type": "library",
+  "description": "Enumeration type for Doctrine - floats only",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {"Doctrineum\\": "Doctrineum/"}
+  },
+  "require": {
+    "php": ">=5.5",
+    "doctrineum/scalar": "dev-master",
+    "granam/strict-object": "dev-master",
+    "granam/strict-float": "dev-master",
+    "granam/exception-hierarchy": "dev-master",
+    "granam/strict-scalar": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.4",
+    "mockery/mockery": "0.9.*"
+  }
+}
