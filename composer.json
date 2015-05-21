@@ -8,11 +8,11 @@
   },
   "require": {
     "php": ">=5.5",
-    "doctrineum/scalar": "dev-master",
-    "granam/strict-object": "dev-master",
-    "granam/strict-float": "dev-master",
-    "granam/exception-hierarchy": "dev-master",
-    "granam/strict-scalar": "dev-master"
+    "doctrineum/scalar": "~1.0",
+    "granam/strict-object": "~1.0",
+    "granam/strict-float": "~1.0",
+    "granam/exception-hierarchy": "~1.0",
+    "granam/strict-scalar": "~1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.4",
