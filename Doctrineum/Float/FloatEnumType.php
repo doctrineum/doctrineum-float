@@ -13,7 +13,6 @@ use Doctrineum\Scalar\EnumType;
 class FloatEnumType extends EnumType
 {
     use FloatEnumTypeTrait;
-    use ConvertToFloatTrait;
 
     const FLOAT_ENUM = 'float_enum';
 
@@ -30,12 +29,4 @@ class FloatEnumType extends EnumType
         return parent::convertToEnum($enumValue);
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function checkValueToConvert($value)
-    {
-        // Uses side effect of the conversion - the checks
-        static::convertToFloat($value);
-    }
 }

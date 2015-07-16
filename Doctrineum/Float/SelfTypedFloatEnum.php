@@ -15,8 +15,8 @@ use Doctrineum\Scalar\SelfTypedEnum;
  */
 class SelfTypedFloatEnum extends SelfTypedEnum
 {
-    use FloatEnumTrait;
     use FloatEnumTypeTrait;
+    use ConvertToFloatEnumFinalValueTrait;
 
     /**
      * Its not directly used this library - the exactly same value is generated and used by
@@ -97,14 +97,5 @@ class SelfTypedFloatEnum extends SelfTypedEnum
         $this->checkValueToConvert($enumValue);
 
         return parent::convertToEnum($enumValue);
-    }
-
-    /**
-     * @param mixed $value
-     */
-    private function checkValueToConvert($value)
-    {
-        // Uses side effect of the conversion - the checks
-        static::convertToFloat($value);
     }
 }

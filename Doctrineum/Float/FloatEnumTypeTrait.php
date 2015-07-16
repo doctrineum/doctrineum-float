@@ -3,6 +3,7 @@ namespace Doctrineum\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrineum\Scalar\EnumInterface;
+use Granam\Float\Tools\ToFloat;
 
 /**
  * @method float convertToDatabaseValue(EnumInterface $enumValue, AbstractPlatform $platform)
@@ -52,5 +53,17 @@ trait FloatEnumTypeTrait
     {
         return 30;
     }
-
+    /**
+     * @param mixed $value
+     */
+    protected function checkValueToConvert($value)
+    {
+        try {
+            // Uses side effect of the conversion - the checks
+            ToFloat::tofloat($value);
+        } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
+            // wrapping exception by a local one
+            throw new \Doctrineum\Float\Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
 }

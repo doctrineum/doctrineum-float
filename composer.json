@@ -10,8 +10,10 @@
     "php": ">=5.5",
     "doctrineum/scalar": "dev-master",
     "granam/strict-object": "dev-master",
+    "granam/float": "dev-master",
     "granam/strict-float": "dev-master",
     "granam/exception-hierarchy": "dev-master",
+    "granam/scalar": "dev-master",
     "granam/strict-scalar": "dev-master"
   },
   "require-dev": {
