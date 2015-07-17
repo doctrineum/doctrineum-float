@@ -9,10 +9,7 @@
   "require": {
     "php": ">=5.5",
     "doctrineum/scalar": "~1.0",
-    "granam/strict-object": "~1.0",
-    "granam/strict-float": "~1.0",
-    "granam/exception-hierarchy": "~1.0",
-    "granam/strict-scalar": "~1.0"
+    "granam/strict-float": "~1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.4",
