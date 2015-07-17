@@ -9,15 +9,12 @@
   "require": {
     "php": ">=5.5",
     "doctrineum/scalar": "dev-master",
-    "granam/strict-object": "dev-master",
-    "granam/float": "dev-master",
-    "granam/strict-float": "dev-master",
-    "granam/exception-hierarchy": "dev-master",
-    "granam/scalar": "dev-master",
-    "granam/strict-scalar": "dev-master"
+    "granam/float": "dev-master"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.4",
+    "phpunit/phpunit": "4.*",
     "mockery/mockery": "0.9.*"
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
