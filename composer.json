@@ -8,7 +8,7 @@
   },
   "require": {
     "php": ">=5.5",
-    "doctrineum/scalar": "~1.1",
+    "doctrineum/scalar": "~2.0",
     "granam/float": "~1.0"
   },
   "require-dev": {
