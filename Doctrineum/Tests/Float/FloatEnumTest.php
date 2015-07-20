@@ -1,6 +1,7 @@
 <?php
-namespace Doctrineum\Float;
+namespace Doctrineum\Tests\Float;
 
+use Doctrineum\Float\FloatEnum;
 use Doctrineum\Scalar\EnumInterface;
 use Doctrineum\Tests\Scalar\WithToStringTestObject;
 
@@ -11,7 +12,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEnumClass()
     {
-        return preg_replace('~Test$~', '', static::class);
+        return FloatEnum::getClass();
     }
 
     /** @test */

@@ -6,7 +6,7 @@ use Granam\Float\Tools\ToFloat;
 
 /**
  * @method float getEnumValue()
- * @method static FloatEnum getEnum()
+ * @method static FloatEnum getEnum($enumValue)
  */
 class FloatEnum extends Enum implements FloatEnumInterface
 {
