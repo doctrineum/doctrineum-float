@@ -1,9 +1,9 @@
 <?php
 namespace Doctrineum\Tests\Float\Exceptions;
 
-use Doctrineum\Float\Exceptions\Logic;
+use Doctrineum\Float\Exceptions\Runtime;
 
-class LogicTest extends \PHPUnit_Framework_TestCase
+class RuntimeTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -11,16 +11,16 @@ class LogicTest extends \PHPUnit_Framework_TestCase
      */
     public function is_interface()
     {
-        $this->assertTrue(interface_exists('Doctrineum\Float\Exceptions\Logic'));
+        $this->assertTrue(interface_exists('Doctrineum\Float\Exceptions\Runtime'));
     }
 
     /**
      * @test
-     * @expectedException \Doctrineum\Scalar\Exceptions\Logic
+     * @expectedException \Doctrineum\Scalar\Exceptions\Runtime
      */
     public function extends_doctrineum_logic_interface()
     {
-        throw new TestLogicInterface();
+        throw new TestRuntimeInterface();
     }
 
     /**
@@ -29,12 +29,12 @@ class LogicTest extends \PHPUnit_Framework_TestCase
      */
     public function extends_local_mark_interface()
     {
-        throw new TestLogicInterface();
+        throw new TestRuntimeInterface();
     }
 }
 
 /** inner */
-class TestLogicInterface extends \Exception implements Logic
+class TestRuntimeInterface extends \Exception implements Runtime
 {
 
 }

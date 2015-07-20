@@ -1,5 +1,7 @@
 <?php
-namespace Doctrineum\Float\Exceptions;
+namespace Doctrineum\Tests\Float\Exceptions;
+
+use Doctrineum\Float\Exceptions\Exception;
 
 class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,7 +11,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function is_interface()
     {
-        $this->assertTrue(interface_exists(Exception::class));
+        $this->assertTrue(interface_exists('Doctrineum\Float\Exceptions\Exception'));
     }
 
     /**

@@ -1,10 +1,12 @@
 <?php
-namespace Doctrineum\Float;
+namespace Doctrineum\Tests\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrineum\Float\FloatEnum;
+use Doctrineum\Float\FloatEnumInterface;
+use Doctrineum\Float\FloatEnumType;
 use Doctrineum\Scalar\EnumInterface;
-use Doctrineum\Tests\Float\FloatEnumTypeTestTrait;
 
 class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,8 +15,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEnumTypeClass()
     {
-        // like FloatEnumType
-        return preg_replace('~Test$~', '', static::class);
+        return FloatEnumType::getClass();
     }
 
     /**
@@ -22,8 +23,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getRegisteredEnumClass()
     {
-        // like FloatEnum
-        return preg_replace('~(Type)?Test$~', '', static::class);
+        return FloatEnum::getClass();
     }
 
     protected function tearDown()
@@ -31,10 +31,9 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
         \Mockery::close();
 
         $enumTypeClass = $this->getEnumTypeClass();
-        $enumType = Type::getType($enumTypeClass::getTypeName(), $enumTypeClass);
+        $enumType = Type::getType($enumTypeClass::getTypeName());
         /** @var FloatEnumType $enumType */
         if ($enumType::hasSubTypeEnum($this->getSubTypeEnumClass())) {
-            /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
             $this->assertTrue($enumType::removeSubTypeEnum($this->getSubTypeEnumClass()));
         }
     }
@@ -77,7 +76,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
         $typeName = $this->convertToTypeName($enumTypeClass);
         // like SELF_TYPED_FLOAT_ENUM
         $constantName = strtoupper($typeName);
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertTrue(defined("$enumTypeClass::$constantName"));
         $this->assertSame($enumTypeClass::getTypeName(), $typeName);
         $this->assertSame($typeName, constant("$enumTypeClass::$constantName"));
@@ -157,11 +155,11 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function enum_as_database_value_is_float_value_of_that_enum(FloatEnumType $enumType)
     {
         $enum = \Mockery::mock(EnumInterface::class);
+        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $enum->shouldReceive('getEnumValue')
             ->once()
             ->andReturn($value = 12345.67859);
         /** @var EnumInterface $enum */
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertSame($value, $enumType->convertToDatabaseValue($enum, $this->getAbstractPlatform()));
     }
 
@@ -178,7 +176,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
     {
         $enum = $enumType->convertToPHPValue($float = 12345.67859, $this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertInstanceOf($this->getRegisteredEnumClass(), $enum);
         $this->assertSame($float, $enum->getValue());
         $this->assertSame("$float", (string)$enum);
@@ -193,7 +190,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function string_float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
     {
         $value = $enumType->convertToPHPValue($stringFloat = '12345.67859', $this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertInstanceOf($this->getRegisteredEnumClass(), $value);
         $this->assertSame(floatval($stringFloat), $value->getValue());
     }
@@ -206,7 +202,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function null_to_php_value_is_zero(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enum = $enumType->convertToPHPValue($null = null, $this->getAbstractPlatform());
         $this->assertSame(0.0, $enum->getValue());
         $this->assertSame(floatval($null), $enum->getValue());
@@ -221,7 +216,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function empty_string_to_php_is_zero(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enum = $enumType->convertToPHPValue($emptyString = '', $this->getAbstractPlatform());
         $this->assertSame(0.0, $enum->getValue());
         $this->assertSame(floatval($emptyString), $enum->getValue());
@@ -237,7 +231,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
     {
         $enum = $enumType->convertToPHPValue($integer = 12345, $this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertInstanceOf($this->getRegisteredEnumClass(), $enum);
         $this->assertSame(12345.0, $enum->getValue());
         $this->assertSame(floatval($integer), $enum->getValue());
@@ -253,7 +246,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function zero_integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
     {
         $enum = $enumType->convertToPHPValue($zeroInteger = 0, $this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertInstanceOf($this->getRegisteredEnumClass(), $enum);
         $this->assertSame(0.0, $enum->getValue());
         $this->assertSame(floatval($zeroInteger), $enum->getValue());
@@ -268,7 +260,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function false_to_php_value_is_zero(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enum = $enumType->convertToPHPValue($false = false, $this->getAbstractPlatform());
         $this->assertSame(0.0, $enum->getValue());
         $this->assertSame(floatval($false), $enum->getValue());
@@ -284,7 +275,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function true_to_php_value_is_one(FloatEnumType $enumType)
     {
         $enum = $enumType->convertToPHPValue($true = true, $this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertSame(1.0, $enum->getValue());
         $this->assertSame(floatval($true), $enum->getValue());
         $this->assertSame((string)floatval($true), (string)$enum);
@@ -355,7 +345,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function can_register_subtype(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertTrue($enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~'));
         $this->assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
 
@@ -371,8 +360,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function can_unregister_subtype(FloatEnumType $enumType)
     {
         /**
-         * @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this
-         *
          * The subtype is unregistered because of tearDown clean up
          * @see FloatEnumTypeTestTrait::tearDown
          */
@@ -390,7 +377,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function subtype_returns_proper_enum(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), $regexp = '~45.6~');
         $this->assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
         /** @var AbstractPlatform $abstractPlatform */
@@ -414,7 +400,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function default_enum_is_given_if_subtype_does_not_match(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), $regexp = '~45.6~');
         $this->assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
         /** @var AbstractPlatform $abstractPlatform */
@@ -440,7 +425,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function registering_same_subtype_again_throws_exception(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $this->assertFalse($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
         $this->assertTrue($enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~'));
         // registering twice - should thrown an exception
@@ -452,11 +436,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Scalar\Exceptions\InvalidClassForSubTypeEnum
+     * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
      */
     public function registering_non_existing_subtype_class_throws_exception(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enumType::addSubTypeEnum('NonExistingClassName', '~foo~');
     }
 
@@ -465,11 +448,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Scalar\Exceptions\InvalidClassForSubTypeEnum
+     * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
      */
     public function registering_subtype_class_without_proper_method_throws_exception(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enumType::addSubTypeEnum(\stdClass::class, '~foo~');
     }
 
@@ -483,7 +465,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function registering_subtype_with_invalid_regexp_throws_exception(FloatEnumType $enumType)
     {
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), 'foo~' /* missing opening delimiter */);
     }
 
@@ -493,7 +474,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function can_register_another_enum_type()
     {
         $anotherEnumType = $this->getAnotherEnumTypeClass();
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         if (!$anotherEnumType::isRegistered()) {
             $this->assertTrue($anotherEnumType::registerSelf());
         } else {
@@ -511,7 +491,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function different_types_with_same_subtype_regexp_distinguish_them()
     {
         $enumTypeClass = $this->getEnumTypeClass();
-        /** @var \PHPUnit_Framework_TestCase|FloatEnumTypeTestTrait $this */
         if ($enumTypeClass::hasSubTypeEnum($this->getSubTypeEnumClass())) {
             $enumTypeClass::removeSubTypeEnum($this->getSubTypeEnumClass());
         }

@@ -8,13 +8,8 @@ use Granam\Float\Tools\ToFloat;
 
 /**
  * @method static FloatEnumType getType($name),
- * @see Type::getType
- *
  * @method float convertToDatabaseValue(EnumInterface $enumValue, AbstractPlatform $platform)
- * @see \Doctrineum\Scalar\EnumType::convertToDatabaseValue
- *
- * @method FloatEnumInterface convertToPHPValue()
- * @see \Doctrineum\Scalar\EnumType::convertToPHPValue
+ * @method FloatEnumInterface convertToPHPValue($value, AbstractPlatform $platform)
  */
 class FloatEnumType extends EnumType implements FloatEnumTypeInterface
 {
