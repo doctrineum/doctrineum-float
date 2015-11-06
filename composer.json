@@ -9,7 +9,7 @@
   "require": {
     "php": ">=5.5",
     "doctrineum/scalar": "~2.0",
-    "granam/float": "~1.0"
+    "granam/float": "~2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.4",
