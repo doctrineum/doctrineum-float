@@ -436,7 +436,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
+     * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumClassNotFound
      */
     public function registering_non_existing_subtype_class_throws_exception(FloatEnumType $enumType)
     {
