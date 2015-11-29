@@ -5,20 +5,11 @@ use Doctrineum\Scalar\Enum;
 use Granam\Float\Tools\ToFloat;
 
 /**
- * @method float getEnumValue()
+ * @method float getValue()
  * @method static FloatEnum getEnum($enumValue)
  */
 class FloatEnum extends Enum implements FloatEnumInterface
 {
-
-    /**
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->getEnumValue();
-    }
-
     /**
      * Overloaded parent @see \Doctrineum\Scalar\EnumTrait::convertToEnumFinalValue
      *

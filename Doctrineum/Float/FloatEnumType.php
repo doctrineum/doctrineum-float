@@ -11,7 +11,7 @@ use Granam\Float\Tools\ToFloat;
  * @method float convertToDatabaseValue(EnumInterface $enumValue, AbstractPlatform $platform)
  * @method FloatEnumInterface convertToPHPValue($value, AbstractPlatform $platform)
  */
-class FloatEnumType extends EnumType implements FloatEnumTypeInterface
+class FloatEnumType extends EnumType
 {
     const FLOAT_ENUM = 'float_enum';
 

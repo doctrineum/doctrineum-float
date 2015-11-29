@@ -156,7 +156,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     {
         $enum = \Mockery::mock(EnumInterface::class);
         /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $enum->shouldReceive('getEnumValue')
+        $enum->shouldReceive('getValue')
             ->once()
             ->andReturn($value = 12345.67859);
         /** @var EnumInterface $enum */
