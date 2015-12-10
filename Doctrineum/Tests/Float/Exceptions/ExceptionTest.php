@@ -11,7 +11,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function is_interface()
     {
-        $this->assertTrue(interface_exists('Doctrineum\Float\Exceptions\Exception'));
+        $this->assertTrue(interface_exists(Exception::class));
     }
 
     /**
