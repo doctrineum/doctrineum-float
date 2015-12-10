@@ -1,14 +1,14 @@
 <?php
 namespace Doctrineum\Float;
 
-use Doctrineum\Scalar\Enum;
+use Doctrineum\Scalar\ScalarEnum;
 use Granam\Float\Tools\ToFloat;
 
 /**
  * @method float getValue()
  * @method static FloatEnum getEnum($enumValue)
  */
-class FloatEnum extends Enum implements FloatEnumInterface
+class FloatEnum extends ScalarEnum implements FloatEnumInterface
 {
     /**
      * Overloaded parent @see \Doctrineum\Scalar\EnumTrait::convertToEnumFinalValue

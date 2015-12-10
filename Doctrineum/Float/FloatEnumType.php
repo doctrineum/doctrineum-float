@@ -2,16 +2,16 @@
 namespace Doctrineum\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrineum\Scalar\EnumInterface;
-use Doctrineum\Scalar\EnumType;
+use Doctrineum\Scalar\ScalarEnumInterface;
+use Doctrineum\Scalar\ScalarEnumType;
 use Granam\Float\Tools\ToFloat;
 
 /**
  * @method static FloatEnumType getType($name),
- * @method float convertToDatabaseValue(EnumInterface $enumValue, AbstractPlatform $platform)
+ * @method float convertToDatabaseValue(ScalarEnumInterface $enumValue, AbstractPlatform $platform)
  * @method FloatEnumInterface convertToPHPValue($value, AbstractPlatform $platform)
  */
-class FloatEnumType extends EnumType
+class FloatEnumType extends ScalarEnumType
 {
     const FLOAT_ENUM = 'float_enum';
 
@@ -72,7 +72,7 @@ class FloatEnumType extends EnumType
     }
 
     /**
-     * @see \Doctrineum\Scalar\EnumType::convertToPHPValue for usage
+     * @see \Doctrineum\Scalar\ScalarEnumType::convertToPHPValue for usage
      *
      * @param string $enumValue
      * @return FloatEnum

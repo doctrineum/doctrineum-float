@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrineum\Float\FloatEnum;
 use Doctrineum\Float\FloatEnumInterface;
 use Doctrineum\Float\FloatEnumType;
-use Doctrineum\Scalar\EnumInterface;
+use Doctrineum\Scalar\ScalarEnumInterface;
 
 class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -154,12 +154,12 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function enum_as_database_value_is_float_value_of_that_enum(FloatEnumType $enumType)
     {
-        $enum = \Mockery::mock(EnumInterface::class);
+        $enum = \Mockery::mock(ScalarEnumInterface::class);
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $enum->shouldReceive('getValue')
             ->once()
             ->andReturn($value = 12345.67859);
-        /** @var EnumInterface $enum */
+        /** @var ScalarEnumInterface $enum */
         $this->assertSame($value, $enumType->convertToDatabaseValue($enum, $this->getAbstractPlatform()));
     }
 
