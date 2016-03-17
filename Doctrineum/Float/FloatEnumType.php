@@ -2,13 +2,13 @@
 namespace Doctrineum\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrineum\Scalar\ScalarEnumInterface;
+use Doctrineum\Scalar\Enum;
 use Doctrineum\Scalar\ScalarEnumType;
 use Granam\Float\Tools\ToFloat;
 
 /**
  * @method static FloatEnumType getType($name),
- * @method float convertToDatabaseValue(ScalarEnumInterface $enumValue, AbstractPlatform $platform)
+ * @method float convertToDatabaseValue(Enum $enumValue, AbstractPlatform $platform)
  * @method FloatEnumInterface convertToPHPValue($value, AbstractPlatform $platform)
  */
 class FloatEnumType extends ScalarEnumType
@@ -67,7 +67,7 @@ class FloatEnumType extends ScalarEnumType
             ToFloat::tofloat($value);
         } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
             // wrapping exception by a local one
-            throw new \Doctrineum\Float\Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
+            throw new Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 

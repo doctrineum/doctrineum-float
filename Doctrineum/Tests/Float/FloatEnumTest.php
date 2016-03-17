@@ -2,7 +2,7 @@
 namespace Doctrineum\Tests\Float;
 
 use Doctrineum\Float\FloatEnum;
-use Doctrineum\Scalar\ScalarEnumInterface;
+use Doctrineum\Scalar\Enum;
 use Doctrineum\Tests\Scalar\WithToStringTestObject;
 
 class FloatEnumTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +21,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $instance = $enumClass::getEnum(12345.6789);
 
-        $this->assertInstanceOf($enumClass, $instance);
+        self::assertInstanceOf($enumClass, $instance);
     }
 
     /** @test */
@@ -30,8 +30,8 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum($float = 12345.6789);
 
-        $this->assertSame($float, $enum->getValue());
-        $this->assertSame("$float", (string)$enum);
+        self::assertSame($float, $enum->getValue());
+        self::assertSame("$float", (string)$enum);
     }
 
     /** @test */
@@ -40,8 +40,8 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum($stringFloat = '12345.6789');
 
-        $this->assertSame(floatval($stringFloat), $enum->getValue());
-        $this->assertSame($stringFloat, (string)$enum);
+        self::assertSame((float)$stringFloat, $enum->getValue());
+        self::assertSame($stringFloat, (string)$enum);
     }
 
     /** @test */
@@ -50,8 +50,8 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum('  12.34 ');
 
-        $this->assertSame(12.34, $enum->getValue());
-        $this->assertSame('12.34', (string)$enum);
+        self::assertSame(12.34, $enum->getValue());
+        self::assertSame('12.34', (string)$enum);
     }
 
     /**
@@ -62,7 +62,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum(123);
 
-        $this->assertSame(123.0, $enum->getValue());
+        self::assertSame(123.0, $enum->getValue());
     }
 
     /**
@@ -73,7 +73,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum('123');
 
-        $this->assertSame(123.0, $enum->getValue());
+        self::assertSame(123.0, $enum->getValue());
     }
 
     /**
@@ -84,7 +84,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum('12.34foo');
 
-        $this->assertSame(12.34, $enum->getValue());
+        self::assertSame(12.34, $enum->getValue());
     }
 
     /**
@@ -95,9 +95,9 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum(new WithToStringTestObject($float = 12345.6789));
 
-        $this->assertInstanceOf(ScalarEnumInterface::class, $enum);
-        $this->assertSame($float, $enum->getValue());
-        $this->assertSame("$float", (string)$enum);
+        self::assertInstanceOf(Enum::class, $enum);
+        self::assertSame($float, $enum->getValue());
+        self::assertSame("$float", (string)$enum);
     }
 
     /**
@@ -108,9 +108,9 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum(new WithToStringTestObject($integer = 12345));
 
-        $this->assertInstanceOf(ScalarEnumInterface::class, $enum);
-        $this->assertSame(floatval($integer), $enum->getValue());
-        $this->assertSame("$integer", (string)$enum);
+        self::assertInstanceOf(Enum::class, $enum);
+        self::assertSame((float)$integer, $enum->getValue());
+        self::assertSame("$integer", (string)$enum);
     }
 
     /**
@@ -121,7 +121,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum(new WithToStringTestObject('foo'));
 
-        $this->assertSame(0.0, $enum->getValue());
+        self::assertSame(0.0, $enum->getValue());
     }
 
     /**
@@ -132,7 +132,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum('');
 
-        $this->assertSame(0.0, $enum->getValue());
+        self::assertSame(0.0, $enum->getValue());
     }
 
     /**
@@ -143,7 +143,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum('foo');
 
-        $this->assertSame(0.0, $enum->getValue());
+        self::assertSame(0.0, $enum->getValue());
     }
 
     /**
@@ -154,7 +154,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
         $enum = $enumClass::getEnum(null);
 
-        $this->assertSame(0.0, $enum->getValue());
+        self::assertSame(0.0, $enum->getValue());
     }
 
     /**
@@ -165,14 +165,14 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
 
         $enum = $enumClass::getEnum($value = 12345.6789);
-        $this->assertInstanceOf($enumClass, $enum);
-        $this->assertSame($value, $enum->getValue());
-        $this->assertSame("$value", (string)$enum);
+        self::assertInstanceOf($enumClass, $enum);
+        self::assertSame($value, $enum->getValue());
+        self::assertSame("$value", (string)$enum);
 
         $inDifferentNamespace = $this->getInheritedEnum($value);
-        $this->assertInstanceOf($enumClass, $inDifferentNamespace);
-        $this->assertSame($enum->getValue(), $inDifferentNamespace->getValue());
-        $this->assertNotSame($enum, $inDifferentNamespace);
+        self::assertInstanceOf($enumClass, $inDifferentNamespace);
+        self::assertSame($enum->getValue(), $inDifferentNamespace->getValue());
+        self::assertNotSame($enum, $inDifferentNamespace);
     }
 
     protected function getInheritedEnum($value)
