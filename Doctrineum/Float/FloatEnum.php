@@ -15,9 +15,14 @@ class FloatEnum extends ScalarEnum implements FloatEnumInterface
      *
      * @param $value
      * @return float
+     * @throws \Doctrineum\Float\Exceptions\WrongValueForFloatEnum
      */
     protected static function convertToEnumFinalValue($value)
     {
-        return ToFloat::toFloat($value);
+        try {
+            return ToFloat::toFloat($value);
+        } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
+            throw new Exceptions\WrongValueForFloatEnum($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 }

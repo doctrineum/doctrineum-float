@@ -8,6 +8,18 @@ use Doctrineum\Tests\Scalar\WithToStringTestObject;
 class FloatEnumTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @test
+     */
+    public function I_can_use_it()
+    {
+        $enumClass = $this->getEnumClass();
+        $floatEnum = $enumClass::getEnum($value = 12345.0);
+
+        self::assertInstanceOf($enumClass, $floatEnum);
+        self::assertSame($value, $floatEnum->getValue());
+    }
+
+    /**
      * @return \Doctrineum\Float\FloatEnum
      */
     protected function getEnumClass()
@@ -15,146 +27,113 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         return FloatEnum::getClass();
     }
 
-    /** @test */
-    public function can_create_enum_instance()
+    /**
+     * @test
+     */
+    public function I_will_get_the_same_value_as_created_with()
     {
         $enumClass = $this->getEnumClass();
-        $instance = $enumClass::getEnum(12345.6789);
+        $floatEnum = $enumClass::getEnum($value = 12345.6789);
 
-        self::assertInstanceOf($enumClass, $instance);
-    }
-
-    /** @test */
-    public function returns_the_same_float_as_created_with()
-    {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum($float = 12345.6789);
-
-        self::assertSame($float, $enum->getValue());
-        self::assertSame("$float", (string)$enum);
-    }
-
-    /** @test */
-    public function returns_float_created_from_string_created_with()
-    {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum($stringFloat = '12345.6789');
-
-        self::assertSame((float)$stringFloat, $enum->getValue());
-        self::assertSame($stringFloat, (string)$enum);
-    }
-
-    /** @test */
-    public function string_with_float_and_spaces_is_trimmed_and_accepted()
-    {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum('  12.34 ');
-
-        self::assertSame(12.34, $enum->getValue());
-        self::assertSame('12.34', (string)$enum);
+        self::assertSame($value, $floatEnum->getValue());
+        self::assertSame("$value", (string)$floatEnum);
     }
 
     /**
      * @test
      */
-    public function integer_is_allowed()
+    public function I_get_float_from_string_number()
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum(123);
+        $floatEnum = $enumClass::getEnum($stringFloat = '12345.6789');
 
-        self::assertSame(123.0, $enum->getValue());
+        self::assertSame((float)$stringFloat, $floatEnum->getValue());
+        self::assertSame($stringFloat, (string)$floatEnum);
     }
 
     /**
      * @test
      */
-    public function string_integer_is_allowed()
+    public function I_get_float_from_value_wrapped_by_white_characters()
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum('123');
+        $floatEnum = $enumClass::getEnum(" \n\t\r\r\n 12.34 \t\t\r  ");
 
-        self::assertSame(123.0, $enum->getValue());
+        self::assertSame(12.34, $floatEnum->getValue());
+        self::assertSame('12.34', (string)$floatEnum);
     }
 
     /**
      * @test
      */
-    public function string_starting_by_float_is_that_float()
+    public function I_get_float_from_integer()
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum('12.34foo');
+        $floatEnum = $enumClass::getEnum(123);
 
-        self::assertSame(12.34, $enum->getValue());
+        self::assertSame(123.0, $floatEnum->getValue());
     }
 
     /**
      * @test
      */
-    public function object_with_float_and_to_string_can_be_used()
+    public function I_get_float_from_string_integer()
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum(new WithToStringTestObject($float = 12345.6789));
+        $floatEnum = $enumClass::getEnum('123');
 
-        self::assertInstanceOf(Enum::class, $enum);
-        self::assertSame($float, $enum->getValue());
-        self::assertSame("$float", (string)$enum);
+        self::assertSame(123.0, $floatEnum->getValue());
+    }
+
+    /**
+     * @test
+     * @expectedException \Doctrineum\Float\Exceptions\WrongValueForFloatEnum
+     */
+    public function I_can_not_use_value_with_trailing_trash()
+    {
+        $enumClass = $this->getEnumClass();
+        $enumClass::getEnum('12.34foo');
     }
 
     /**
      * @test
      */
-    public function object_with_integer_and_to_string_can_be_used()
+    public function I_get_float_from_to_string_convertible_object()
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum(new WithToStringTestObject($integer = 12345));
 
-        self::assertInstanceOf(Enum::class, $enum);
-        self::assertSame((float)$integer, $enum->getValue());
-        self::assertSame("$integer", (string)$enum);
+        $floatEnum = $enumClass::getEnum(new WithToStringTestObject($floatValue = 12345.6789));
+        self::assertInstanceOf(Enum::class, $floatEnum);
+        self::assertSame($floatValue, $floatEnum->getValue());
+        self::assertSame("$floatValue", (string)$floatEnum);
+
+        $floatEnum = $enumClass::getEnum(new WithToStringTestObject($integerValue = 12345));
+        self::assertInstanceOf(Enum::class, $floatEnum);
+        self::assertSame((float)$integerValue, $floatEnum->getValue());
+        self::assertSame("$integerValue", (string)$floatEnum);
     }
 
     /**
      * @test
+     * @dataProvider provideNonNumericValue
+     * @expectedException \Doctrineum\Float\Exceptions\WrongValueForFloatEnum
+     *
+     * @param mixed $nonNumericValue
      */
-    public function object_with_characters_only_is_zero()
+    public function I_can_not_convert_non_numeric_value($nonNumericValue)
     {
         $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum(new WithToStringTestObject('foo'));
-
-        self::assertSame(0.0, $enum->getValue());
+        $enumClass::getEnum($nonNumericValue);
     }
 
-    /**
-     * @test
-     */
-    public function empty_string_is_zero()
+    public function provideNonNumericValue()
     {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum('');
-
-        self::assertSame(0.0, $enum->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function characters_only_is_zero()
-    {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum('foo');
-
-        self::assertSame(0.0, $enum->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function null_is_zero()
-    {
-        $enumClass = $this->getEnumClass();
-        $enum = $enumClass::getEnum(null);
-
-        self::assertSame(0.0, $enum->getValue());
+        return [
+            ['foo'],
+            [new WithToStringTestObject('foo')],
+            [''],
+            [null]
+        ];
     }
 
     /**
@@ -164,15 +143,15 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
     {
         $enumClass = $this->getEnumClass();
 
-        $enum = $enumClass::getEnum($value = 12345.6789);
-        self::assertInstanceOf($enumClass, $enum);
-        self::assertSame($value, $enum->getValue());
-        self::assertSame("$value", (string)$enum);
+        $floatEnum = $enumClass::getEnum($value = 12345.6789);
+        self::assertInstanceOf($enumClass, $floatEnum);
+        self::assertSame($value, $floatEnum->getValue());
+        self::assertSame("$value", (string)$floatEnum);
 
         $inDifferentNamespace = $this->getInheritedEnum($value);
         self::assertInstanceOf($enumClass, $inDifferentNamespace);
-        self::assertSame($enum->getValue(), $inDifferentNamespace->getValue());
-        self::assertNotSame($enum, $inDifferentNamespace);
+        self::assertSame($floatEnum->getValue(), $inDifferentNamespace->getValue());
+        self::assertNotSame($floatEnum, $inDifferentNamespace);
     }
 
     protected function getInheritedEnum($value)

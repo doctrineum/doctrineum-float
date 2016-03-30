@@ -10,22 +10,6 @@ use Doctrineum\Scalar\Enum;
 
 class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return \Doctrineum\Float\FloatEnumType
-     */
-    protected function getEnumTypeClass()
-    {
-        return FloatEnumType::getClass();
-    }
-
-    /**
-     * @return \Doctrineum\Float\FloatEnum
-     */
-    protected function getRegisteredEnumClass()
-    {
-        return FloatEnum::getClass();
-    }
-
     protected function tearDown()
     {
         \Mockery::close();
@@ -39,35 +23,40 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return \Doctrineum\Float\FloatEnumType
+     */
+    protected function getEnumTypeClass()
+    {
+        return FloatEnumType::getClass();
+    }
+
+    /**
      * @test
      */
-    public function can_be_registered()
+    public function I_can_register_it()
     {
         $enumTypeClass = $this->getEnumTypeClass();
         Type::addType($enumTypeClass::getTypeName(), $enumTypeClass);
-        /** @var \PHPUnit_Framework_TestCase $this */
         self::assertTrue(Type::hasType($enumTypeClass::getTypeName()));
     }
 
     /**
      * @test
-     * @depends can_be_registered
      */
-    public function type_instance_can_be_obtained()
+    public function I_can_get_type()
     {
         $enumTypeClass = $this->getEnumTypeClass();
-        $instance = $enumTypeClass::getType($enumTypeClass::getTypeName());
-        /** @var \PHPUnit_Framework_TestCase $this */
-        self::assertInstanceOf($enumTypeClass, $instance);
+        $floatEnumType = $enumTypeClass::getType($enumTypeClass::getTypeName());
+        self::assertInstanceOf($enumTypeClass, $floatEnumType);
 
-        return $instance;
+        return $floatEnumType;
     }
 
     /**
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function type_name_is_as_expected(FloatEnumType $enumType)
     {
@@ -101,14 +90,13 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function sql_declaration_is_valid(FloatEnumType $enumType)
     {
         $sql = $enumType->getSQLDeclaration([], $this->getAbstractPlatform());
         $defaultLength = $enumType->getDefaultLength($this->getAbstractPlatform());
         $decimalPrecision = $enumType->getDecimalPrecision($this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase $this */
         self::assertSame("DECIMAL($defaultLength,$decimalPrecision)", $sql);
     }
 
@@ -124,12 +112,11 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function sql_default_length_is_sixty_five(FloatEnumType $enumType)
     {
         $defaultLength = $enumType->getDefaultLength($this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase $this */
         self::assertSame(65, $defaultLength);
     }
 
@@ -137,12 +124,11 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function sql_decimal_precision_is_thirty(FloatEnumType $enumType)
     {
         $defaultLength = $enumType->getDecimalPrecision($this->getAbstractPlatform());
-        /** @var \PHPUnit_Framework_TestCase $this */
         self::assertSame(30, $defaultLength);
     }
 
@@ -150,17 +136,26 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function enum_as_database_value_is_float_value_of_that_enum(FloatEnumType $enumType)
     {
+        $enum = $this->createEnum($value = 12345.67859);
+        self::assertSame($value, $enumType->convertToDatabaseValue($enum, $this->getAbstractPlatform()));
+    }
+
+    /**
+     * @param $value
+     * @return \Mockery\MockInterface|Enum
+     */
+    private function createEnum($value)
+    {
         $enum = \Mockery::mock(Enum::class);
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $enum->shouldReceive('getValue')
             ->once()
-            ->andReturn($value = 12345.67859);
-        /** @var Enum $enum */
-        self::assertSame($value, $enumType->convertToDatabaseValue($enum, $this->getAbstractPlatform()));
+            ->andReturn($value);
+
+        return $enum;
     }
 
     /**
@@ -171,7 +166,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
     {
@@ -182,10 +177,18 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return \Doctrineum\Float\FloatEnum
+     */
+    protected function getRegisteredEnumClass()
+    {
+        return FloatEnum::getClass();
+    }
+
+    /**
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function string_float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
     {
@@ -195,38 +198,40 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param FloatEnumType $enumType
+     * @param $nonNumericValue
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
+     * @dataProvider provideNonNumericValue
+     *
+     * Note: NULL from database remains NULL, is not converted to enum at all (Doctrine native behaviour).
      */
-    public function null_to_php_value_is_zero(FloatEnumType $enumType)
+    public function I_can_not_convert_non_numeric_to_enum_value($nonNumericValue)
     {
-        $enum = $enumType->convertToPHPValue($null = null, $this->getAbstractPlatform());
-        self::assertSame(0.0, $enum->getValue());
-        self::assertSame((float)$null, $enum->getValue());
-        self::assertSame((string)(float)$null, (string)$enum);
+        $enumTypeClass = $this->getEnumTypeClass();
+        $enumType = Type::getType($enumTypeClass::getTypeName());
+        $enumType->convertToPHPValue($nonNumericValue, $this->getAbstractPlatform());
+    }
+
+    public function provideNonNumericValue()
+    {
+        return [
+            [null],
+            [''],
+            [[]],
+            [tmpfile()],
+            [new \stdClass()],
+            [function () {
+                return 123;
+            }]
+        ];
     }
 
     /**
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
-     */
-    public function empty_string_to_php_is_zero(FloatEnumType $enumType)
-    {
-        $enum = $enumType->convertToPHPValue($emptyString = '', $this->getAbstractPlatform());
-        self::assertSame(0.0, $enum->getValue());
-        self::assertSame((float)$emptyString, $enum->getValue());
-        self::assertSame((string)(float)$emptyString, (string)$enum);
-    }
-
-    /**
-     * @param FloatEnumType $enumType
-     *
-     * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
     {
@@ -241,7 +246,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function zero_integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
     {
@@ -256,7 +261,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function false_to_php_value_is_zero(FloatEnumType $enumType)
     {
@@ -270,7 +275,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function true_to_php_value_is_one(FloatEnumType $enumType)
     {
@@ -278,58 +283,6 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
         self::assertSame(1.0, $enum->getValue());
         self::assertSame((float)$true, $enum->getValue());
         self::assertSame((string)(float)$true, (string)$enum);
-    }
-
-    /**
-     * @param FloatEnumType $enumType
-     *
-     * @test
-     * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
-     */
-    public function array_to_php_value_cause_exception(FloatEnumType $enumType)
-    {
-        $enumType->convertToPHPValue([], $this->getAbstractPlatform());
-    }
-
-    /**
-     * @param FloatEnumType $enumType
-     *
-     * @test
-     * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
-     */
-    public function resource_to_php_value_cause_exception(FloatEnumType $enumType)
-    {
-        $enumType->convertToPHPValue(tmpfile(), $this->getAbstractPlatform());
-    }
-
-    /**
-     * @param FloatEnumType $enumType
-     *
-     * @test
-     * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
-     */
-    public function object_to_php_value_cause_exception(FloatEnumType $enumType)
-    {
-        $enumType->convertToPHPValue(new \stdClass(), $this->getAbstractPlatform());
-    }
-
-    /**
-     * @param FloatEnumType $enumType
-     *
-     * @test
-     * @depends type_instance_can_be_obtained
-     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
-     */
-    public function callback_to_php_value_cause_exception(FloatEnumType $enumType)
-    {
-        $enumType->convertToPHPValue(
-            function () {
-            },
-            $this->getAbstractPlatform()
-        );
     }
 
     /**
@@ -341,7 +294,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @return FloatEnumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      */
     public function can_register_subtype(FloatEnumType $enumType)
     {
@@ -420,7 +373,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumIsAlreadyRegistered
      */
     public function registering_same_subtype_again_throws_exception(FloatEnumType $enumType)
@@ -435,7 +388,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumClassNotFound
      */
     public function registering_non_existing_subtype_class_throws_exception(FloatEnumType $enumType)
@@ -447,7 +400,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
      */
     public function registering_subtype_class_without_proper_method_throws_exception(FloatEnumType $enumType)
@@ -459,7 +412,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      * @param FloatEnumType $enumType
      *
      * @test
-     * @depends type_instance_can_be_obtained
+     * @depends I_can_get_type
      * @expectedException \Doctrineum\Scalar\Exceptions\InvalidRegexpFormat
      * @expectedExceptionMessage The given regexp is not enclosed by same delimiters and therefore is not valid: 'foo~'
      */
