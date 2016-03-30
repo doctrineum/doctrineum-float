@@ -4,6 +4,7 @@ namespace Doctrineum\Tests\Float;
 use Doctrineum\Float\FloatEnum;
 use Doctrineum\Scalar\Enum;
 use Doctrineum\Tests\Scalar\WithToStringTestObject;
+use Granam\Float\FloatInterface;
 
 class FloatEnumTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,6 +17,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $floatEnum = $enumClass::getEnum($value = 12345.0);
 
         self::assertInstanceOf($enumClass, $floatEnum);
+        self::assertInstanceOf(FloatInterface::class, $floatEnum);
         self::assertSame($value, $floatEnum->getValue());
     }
 
