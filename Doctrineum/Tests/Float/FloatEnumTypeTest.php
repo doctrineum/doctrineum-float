@@ -7,19 +7,23 @@ use Doctrineum\Float\FloatEnum;
 use Doctrineum\Float\FloatEnumInterface;
 use Doctrineum\Float\FloatEnumType;
 use Doctrineum\Scalar\Enum;
+use Granam\Tests\Tools\TestWithMockery;
 
-class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
+class FloatEnumTypeTest extends TestWithMockery
 {
     protected function tearDown()
     {
-        \Mockery::close();
-
         $enumTypeClass = $this->getEnumTypeClass();
         $enumType = Type::getType($enumTypeClass::getTypeName());
         /** @var FloatEnumType $enumType */
-        if ($enumType::hasSubTypeEnum($this->getSubTypeEnumClass())) {
-            self::assertTrue($enumType::removeSubTypeEnum($this->getSubTypeEnumClass()));
+        if ($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class)) {
+            self::assertTrue($enumType::removeSubTypeEnum(TestSubTypeFloatEnum::class));
         }
+        if ($enumType::hasSubTypeEnum(TestAnotherSubTypeFloatEnum::class)) {
+            self::assertTrue($enumType::removeSubTypeEnum(TestAnotherSubTypeFloatEnum::class));
+        }
+
+        parent::tearDown();
     }
 
     /**
@@ -105,7 +109,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getAbstractPlatform()
     {
-        return \Mockery::mock(AbstractPlatform::class);
+        return $this->mockery(AbstractPlatform::class);
     }
 
     /**
@@ -150,7 +154,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function createEnum($value)
     {
-        $enum = \Mockery::mock(Enum::class);
+        $enum = $this->mockery(Enum::class);
         $enum->shouldReceive('getValue')
             ->once()
             ->andReturn($value);
@@ -298,8 +302,8 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function can_register_subtype(FloatEnumType $enumType)
     {
-        self::assertTrue($enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~'));
-        self::assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
+        self::assertTrue($enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~'));
+        self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
 
         return $enumType;
     }
@@ -316,10 +320,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
          * The subtype is unregistered because of tearDown clean up
          * @see FloatEnumTypeTestTrait::tearDown
          */
-        self::assertFalse($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()), 'Subtype should not be registered yet');
-        self::assertTrue($enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~'));
-        self::assertTrue($enumType::removeSubTypeEnum($this->getSubTypeEnumClass()));
-        self::assertFalse($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
+        self::assertFalse($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class), 'Subtype should not be registered yet');
+        self::assertTrue($enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~'));
+        self::assertTrue($enumType::removeSubTypeEnum(TestSubTypeFloatEnum::class));
+        self::assertFalse($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
     }
 
     /**
@@ -330,10 +334,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function subtype_returns_proper_enum(FloatEnumType $enumType)
     {
-        $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), $regexp = '~45.6~');
-        self::assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
+        $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, $regexp = '~45.6~');
+        self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
         /** @var AbstractPlatform $abstractPlatform */
-        $abstractPlatform = \Mockery::mock(AbstractPlatform::class);
+        $abstractPlatform = $this->mockery(AbstractPlatform::class);
         $matchingValueToConvert = 12345.6789;
         self::assertRegExp($regexp, "$matchingValueToConvert");
         /**
@@ -341,7 +345,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
          * @see \Doctrineum\Tests\Scalar\TestSubtype::getEnum
          */
         $enumFromSubType = $enumType->convertToPHPValue($matchingValueToConvert, $abstractPlatform);
-        self::assertInstanceOf($this->getSubTypeEnumClass(), $enumFromSubType);
+        self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumFromSubType);
         self::assertSame("$matchingValueToConvert", "$enumFromSubType");
     }
 
@@ -353,10 +357,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function default_enum_is_given_if_subtype_does_not_match(FloatEnumType $enumType)
     {
-        $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), $regexp = '~45.6~');
-        self::assertTrue($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
+        $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, $regexp = '~45.6~');
+        self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
         /** @var AbstractPlatform $abstractPlatform */
-        $abstractPlatform = \Mockery::mock(AbstractPlatform::class);
+        $abstractPlatform = $this->mockery(AbstractPlatform::class);
         $nonMatchingValueToConvert = 9999.9999;
         self::assertNotRegExp($regexp, "$nonMatchingValueToConvert");
         /**
@@ -378,10 +382,10 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function registering_same_subtype_again_throws_exception(FloatEnumType $enumType)
     {
-        self::assertFalse($enumType::hasSubTypeEnum($this->getSubTypeEnumClass()));
-        self::assertTrue($enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~'));
+        self::assertFalse($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
+        self::assertTrue($enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~'));
         // registering twice - should thrown an exception
-        $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), '~foo~');
+        $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~');
     }
 
     /**
@@ -418,7 +422,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function registering_subtype_with_invalid_regexp_throws_exception(FloatEnumType $enumType)
     {
-        $enumType::addSubTypeEnum($this->getSubTypeEnumClass(), 'foo~' /* missing opening delimiter */);
+        $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, 'foo~' /* missing opening delimiter */);
     }
 
     /**
@@ -426,14 +430,13 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function can_register_another_enum_type()
     {
-        $anotherEnumType = $this->getAnotherEnumTypeClass();
-        if (!$anotherEnumType::isRegistered()) {
-            self::assertTrue($anotherEnumType::registerSelf());
+        if (!TestAnotherFloatEnumType::isRegistered()) {
+            self::assertTrue(TestAnotherFloatEnumType::registerSelf());
         } else {
-            self::assertFalse($anotherEnumType::registerSelf());
+            self::assertFalse(TestAnotherFloatEnumType::registerSelf());
         }
 
-        self::assertTrue($anotherEnumType::isRegistered());
+        self::assertTrue(TestAnotherFloatEnumType::isRegistered());
     }
 
     /**
@@ -444,29 +447,28 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
     public function different_types_with_same_subtype_regexp_distinguish_them()
     {
         $enumTypeClass = $this->getEnumTypeClass();
-        if ($enumTypeClass::hasSubTypeEnum($this->getSubTypeEnumClass())) {
-            $enumTypeClass::removeSubTypeEnum($this->getSubTypeEnumClass());
+        if ($enumTypeClass::hasSubTypeEnum(TestSubTypeFloatEnum::class)) {
+            $enumTypeClass::removeSubTypeEnum(TestSubTypeFloatEnum::class);
         }
-        $enumTypeClass::addSubTypeEnum($this->getSubTypeEnumClass(), $regexp = '~[4-6]+~');
+        $enumTypeClass::addSubTypeEnum(TestSubTypeFloatEnum::class, $regexp = '~[4-6]+~');
 
-        $anotherEnumTypeClass = $this->getAnotherEnumTypeClass();
-        if ($anotherEnumTypeClass::hasSubTypeEnum($this->getAnotherSubTypeEnumClass())) {
-            $anotherEnumTypeClass::removeSubTypeEnum($this->getAnotherSubTypeEnumClass());
+        if (TestAnotherFloatEnumType::hasSubTypeEnum(TestAnotherSubTypeFloatEnum::class)) {
+            TestAnotherFloatEnumType::removeSubTypeEnum(TestAnotherSubTypeFloatEnum::class);
         }
         // regexp is same, sub-type is not
-        $anotherEnumTypeClass::addSubTypeEnum($this->getAnotherSubTypeEnumClass(), $regexp);
+        TestAnotherFloatEnumType::addSubTypeEnum(TestAnotherSubTypeFloatEnum::class, $regexp);
 
         $value = 345.678;
         self::assertRegExp($regexp, "$value");
 
         $enumType = Type::getType($enumTypeClass::getTypeName());
         $enumSubType = $enumType->convertToPHPValue($value, $this->getPlatform());
-        self::assertInstanceOf($this->getSubTypeEnumClass(), $enumSubType);
+        self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumSubType);
         self::assertSame("$value", "$enumSubType");
 
-        $anotherEnumType = Type::getType($anotherEnumTypeClass::getTypeName());
+        $anotherEnumType = Type::getType(TestAnotherFloatEnumType::getTypeName());
         $anotherEnumSubType = $anotherEnumType->convertToPHPValue($value, $this->getPlatform());
-        self::assertInstanceOf($this->getSubTypeEnumClass(), $enumSubType);
+        self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumSubType);
         self::assertSame("$value", "$anotherEnumSubType");
 
         // registered sub-types are different, although regexp is the same - let's test if they are kept separately
@@ -478,31 +480,7 @@ class FloatEnumTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getPlatform()
     {
-        return \Mockery::mock(AbstractPlatform::class);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getSubTypeEnumClass()
-    {
-        return TestSubTypeFloatEnum::class;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAnotherSubTypeEnumClass()
-    {
-        return TestAnotherSubTypeFloatEnum::class;
-    }
-
-    /**
-     * @return FloatEnumType|string
-     */
-    protected function getAnotherEnumTypeClass()
-    {
-        return TestAnotherFloatEnumType::class;
+        return $this->mockery(AbstractPlatform::class);
     }
 
 }
