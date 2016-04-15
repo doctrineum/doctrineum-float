@@ -22,13 +22,13 @@ FloatEnum::getEnum(12);
 FloatEnum::getEnum('12foo');
 
 // correct - is converted to 0.0, same way as floatval() should do
-FloatEnum::getEnum(null)
-
-// correct - is converted to 0.0, same way as floatval() should do
 FloatEnum::getEnum('');
 
 // cause exception - only scalar values, null, or to string object can be cast to float
 FloatEnum::getEnum(array(1.5));
+
+// cause exception - null can not be used for any enum, use null directly for the column value instead
+FloatEnum::getEnum(null)
 ```
 
 # Doctrine integration
