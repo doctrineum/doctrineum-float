@@ -58,30 +58,30 @@ class FloatEnumType extends ScalarEnumType
     }
 
     /**
-     * @param mixed $value
+     * @see \Doctrineum\Scalar\ScalarEnumType::convertToPHPValue for usage
+     *
+     * @param string $enumValue
+     * @return FloatEnum
+     * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
      */
-    protected function checkValueToConvert($value)
+    protected function convertToEnum($enumValue)
+    {
+        return parent::convertToEnum($this->toFloat($enumValue));
+    }
+
+    /**
+     * @param mixed $value
+     * @return float
+     * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
+     */
+    protected function toFloat($value)
     {
         try {
             // Uses side effect of the conversion - the checks
-            ToFloat::tofloat($value);
+            return ToFloat::tofloat($value, true /* strict */);
         } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
             // wrapping exception by a local one
             throw new Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
-
-    /**
-     * @see \Doctrineum\Scalar\ScalarEnumType::convertToPHPValue for usage
-     *
-     * @param string $enumValue
-     * @return FloatEnum
-     */
-    protected function convertToEnum($enumValue)
-    {
-        $this->checkValueToConvert($enumValue);
-
-        return parent::convertToEnum($enumValue);
-    }
-
 }

@@ -122,7 +122,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
      *
      * @param mixed $nonNumericValue
      */
-    public function I_can_not_convert_non_numeric_value($nonNumericValue)
+    public function I_can_not_create_enum_from_non_numeric_value($nonNumericValue)
     {
         $enumClass = $this->getEnumClass();
         $enumClass::getEnum($nonNumericValue);

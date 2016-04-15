@@ -20,7 +20,7 @@ class FloatEnum extends ScalarEnum implements FloatEnumInterface
     protected static function convertToEnumFinalValue($value)
     {
         try {
-            return ToFloat::toFloat($value);
+            return ToFloat::toFloat($value, true /* strict */);
         } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
             throw new Exceptions\WrongValueForFloatEnum($exception->getMessage(), $exception->getCode(), $exception);
         }

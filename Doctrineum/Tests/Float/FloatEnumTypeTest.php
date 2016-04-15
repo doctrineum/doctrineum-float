@@ -206,9 +206,7 @@ class FloatEnumTypeTest extends TestWithMockery
      *
      * @test
      * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
-     * @dataProvider provideNonNumericValue
-     *
-     * Note: NULL from database remains NULL, is not converted to enum at all (Doctrine native behaviour).
+     * @dataProvider provideNonNumericNonNullValue
      */
     public function I_can_not_convert_non_numeric_to_enum_value($nonNumericValue)
     {
@@ -217,10 +215,9 @@ class FloatEnumTypeTest extends TestWithMockery
         $enumType->convertToPHPValue($nonNumericValue, $this->getAbstractPlatform());
     }
 
-    public function provideNonNumericValue()
+    public function provideNonNumericNonNullValue()
     {
         return [
-            [null],
             [''],
             [[]],
             [tmpfile()],
@@ -229,6 +226,16 @@ class FloatEnumTypeTest extends TestWithMockery
                 return 123;
             }]
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function I_get_null_if_fetched_from_database()
+    {
+        $enumTypeClass = $this->getEnumTypeClass();
+        $enumType = Type::getType($enumTypeClass::getTypeName());
+        self::assertNull($enumType->convertToPHPValue(null, $this->getAbstractPlatform()));
     }
 
     /**
