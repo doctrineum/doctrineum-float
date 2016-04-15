@@ -3,7 +3,7 @@ namespace Doctrineum\Tests\Float;
 
 use Doctrineum\Float\FloatEnum;
 use Doctrineum\Scalar\Enum;
-use Doctrineum\Tests\Scalar\WithToStringTestObject;
+use Doctrineum\Tests\Scalar\Helpers\WithToStringTestObject;
 use Granam\Float\FloatInterface;
 
 class FloatEnumTest extends \PHPUnit_Framework_TestCase
