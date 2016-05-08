@@ -2,7 +2,7 @@
 namespace Doctrineum\Tests\Float;
 
 use Doctrineum\Float\FloatEnum;
-use Doctrineum\Scalar\Enum;
+use Doctrineum\Scalar\ScalarEnumInterface;
 use Doctrineum\Tests\Scalar\Helpers\WithToStringTestObject;
 use Granam\Float\FloatInterface;
 
@@ -105,12 +105,12 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
         $enumClass = $this->getEnumClass();
 
         $floatEnum = $enumClass::getEnum(new WithToStringTestObject($floatValue = 12345.6789));
-        self::assertInstanceOf(Enum::class, $floatEnum);
+        self::assertInstanceOf(ScalarEnumInterface::class, $floatEnum);
         self::assertSame($floatValue, $floatEnum->getValue());
         self::assertSame("$floatValue", (string)$floatEnum);
 
         $floatEnum = $enumClass::getEnum(new WithToStringTestObject($integerValue = 12345));
-        self::assertInstanceOf(Enum::class, $floatEnum);
+        self::assertInstanceOf(ScalarEnumInterface::class, $floatEnum);
         self::assertSame((float)$integerValue, $floatEnum->getValue());
         self::assertSame("$integerValue", (string)$floatEnum);
     }

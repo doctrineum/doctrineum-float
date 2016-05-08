@@ -2,18 +2,22 @@
 namespace Doctrineum\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrineum\Scalar\Enum;
+use Doctrineum\Scalar\ScalarEnumInterface;
 use Doctrineum\Scalar\ScalarEnumType;
 use Granam\Float\Tools\ToFloat;
 
 /**
- * @method static FloatEnumType getType($name),
- * @method float convertToDatabaseValue(Enum $enumValue, AbstractPlatform $platform)
+ * @method float convertToDatabaseValue(ScalarEnumInterface $enumValue, AbstractPlatform $platform)
  * @method FloatEnumInterface convertToPHPValue($value, AbstractPlatform $platform)
  */
 class FloatEnumType extends ScalarEnumType
 {
     const FLOAT_ENUM = 'float_enum';
+
+    public function getName()
+    {
+        return self::FLOAT_ENUM;
+    }
 
     /**
      * The PHP float is saved as SQL decimal, therefore exactly as given (SQL float is rounded, therefore changed often).
