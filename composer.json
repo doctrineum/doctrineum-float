@@ -3,8 +3,18 @@
   "type": "library",
   "description": "Enumeration type for Doctrine - floats only",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "Jaroslav Týc",
+      "email": "mail@jaroslavtyc.com",
+      "homepage": "https://www.jaroslavtyc.com",
+      "role": "Developer"
+    }
+  ],
   "autoload": {
-    "psr-4": {"Doctrineum\\": "Doctrineum/"}
+    "psr-4": {
+      "Doctrineum\\": "Doctrineum/"
+    }
   },
   "require": {
     "php": ">=5.5",
