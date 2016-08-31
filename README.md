@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/jaroslavtyc/doctrineum-float.svg?branch=master)](https://travis-ci.org/jaroslavtyc/doctrineum-float)
-
+[![Test Coverage](https://codeclimate.com/github/jaroslavtyc/doctrineum-float/badges/coverage.svg)](https://codeclimate.com/github/jaroslavtyc/doctrineum-float/coverage)
+[![License](https://poser.pugx.org/doctrineum/float/license)](https://packagist.org/packages/doctrineum/float)
 
 # About
 [Doctrine](http://www.doctrine-project.org/) [enum](http://en.wikipedia.org/wiki/Enumerated_type) allowing floats only.
