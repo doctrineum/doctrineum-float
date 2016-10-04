@@ -22,7 +22,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Doctrineum\Float\FloatEnum
+     * @return \Doctrineum\Float\FloatEnum|string
      */
     protected function getEnumClass()
     {
@@ -134,7 +134,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
             ['foo'],
             [new WithToStringTestObject('foo')],
             [''],
-            [null]
+            [null],
         ];
     }
 
@@ -158,12 +158,11 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
 
     protected function getInheritedEnum($value)
     {
-        return new TestInheritedFloatEnum($value);
+        return TestInheritedFloatEnum::getEnum($value);
     }
 }
 
 /** inner */
 class TestInheritedFloatEnum extends FloatEnum
 {
-
 }
