@@ -56,7 +56,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     }
 
     /**
-     * @return AbstractPlatform
+     * @return AbstractPlatform|\Mockery\MockInterface
      */
     private function getAbstractPlatform()
     {
@@ -136,7 +136,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      */
     protected function getRegisteredEnumClass()
     {
-        return FloatEnum::getClass();
+        return FloatEnum::class;
     }
 
     /**
@@ -418,7 +418,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     }
 
     /**
-     * @return AbstractPlatform
+     * @return AbstractPlatform|\Mockery\MockInterface
      */
     protected function getPlatform()
     {

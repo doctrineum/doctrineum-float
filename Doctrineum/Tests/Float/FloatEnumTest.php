@@ -26,7 +26,7 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEnumClass()
     {
-        return FloatEnum::getClass();
+        return FloatEnum::class;
     }
 
     /**
