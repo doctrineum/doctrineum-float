@@ -43,7 +43,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -65,7 +64,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -77,7 +75,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -89,7 +86,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -119,7 +115,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -141,7 +136,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -154,7 +148,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param $nonNumericValue
-     *
      * @test
      * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
      * @dataProvider provideNonNumericNonNullValue
@@ -174,7 +167,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
             [new \stdClass()],
             [function () {
                 return 123;
-            }]
+            }],
         ];
     }
 
@@ -189,7 +182,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -204,7 +196,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -219,7 +210,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -233,7 +223,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -252,7 +241,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     /**
      * @param FloatEnumType $enumType
      * @return FloatEnumType
-     *
      * @test
      * @depends I_can_get_instance
      */
@@ -266,7 +254,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends can_register_subtype
      */
@@ -274,6 +261,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     {
         /**
          * The subtype is unregistered because of tearDown clean up
+         *
          * @see FloatEnumTypeTestTrait::tearDown
          */
         self::assertFalse($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class), 'Subtype should not be registered yet');
@@ -284,7 +272,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends can_register_subtype
      */
@@ -298,6 +285,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         self::assertRegExp($regexp, "$matchingValueToConvert");
         /**
          * Used TestSubtype returns as an "enum" the given value, which is $valueToConvert in this case,
+         *
          * @see \Doctrineum\Tests\Scalar\TestSubtype::getEnum
          */
         $enumFromSubType = $enumType->convertToPHPValue($matchingValueToConvert, $abstractPlatform);
@@ -307,7 +295,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends can_register_subtype
      */
@@ -321,6 +308,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         self::assertNotRegExp($regexp, "$nonMatchingValueToConvert");
         /**
          * Used TestSubtype returns as an "enum" the given value, which is $valueToConvert in this case,
+         *
          * @see \Doctrineum\Tests\Scalar\TestSubtype::getEnum
          */
         $enum = $enumType->convertToPHPValue($nonMatchingValueToConvert, $abstractPlatform);
@@ -331,7 +319,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumIsAlreadyRegistered
@@ -346,7 +333,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumClassNotFound
@@ -358,7 +344,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
@@ -370,7 +355,6 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @param FloatEnumType $enumType
-     *
      * @test
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\InvalidRegexpFormat

@@ -5,8 +5,9 @@ use Doctrineum\Float\FloatEnum;
 use Doctrineum\Scalar\ScalarEnumInterface;
 use Doctrineum\Tests\Scalar\Helpers\WithToStringTestObject;
 use Granam\Float\FloatInterface;
+use PHPUnit\Framework\TestCase;
 
-class FloatEnumTest extends \PHPUnit_Framework_TestCase
+class FloatEnumTest extends TestCase
 {
     /**
      * @test
@@ -119,7 +120,6 @@ class FloatEnumTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provideNonNumericValue
      * @expectedException \Doctrineum\Float\Exceptions\WrongValueForFloatEnum
-     *
      * @param mixed $nonNumericValue
      */
     public function I_can_not_create_enum_from_non_numeric_value($nonNumericValue)
