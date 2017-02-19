@@ -18,14 +18,12 @@
   },
   "require": {
     "php": ">=7.0",
-    "doctrineum/scalar": "dev-master",
-    "granam/float": "dev-master"
+    "doctrineum/scalar": "^3.0",
+    "granam/float": "^4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.0",
     "mockery/mockery": "~0.9",
     "granam/exceptions-hierarchy": "~4.0"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
