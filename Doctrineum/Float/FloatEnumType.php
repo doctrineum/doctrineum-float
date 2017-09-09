@@ -14,7 +14,7 @@ class FloatEnumType extends ScalarEnumType
 {
     const FLOAT_ENUM = 'float_enum';
 
-    public function getName()
+    public function getName(): string
     {
         return self::FLOAT_ENUM;
     }
@@ -32,7 +32,7 @@ class FloatEnumType extends ScalarEnumType
         /** @noinspection PhpUnusedParameterInspection */
         array $fieldDeclaration,
         AbstractPlatform $platform
-    )
+    ): string
     {
         return "DECIMAL({$this->getDefaultLength($platform)},{$this->getDecimalPrecision($platform)})";
     }
@@ -44,7 +44,7 @@ class FloatEnumType extends ScalarEnumType
     public function getDefaultLength(
         /** @noinspection PhpUnusedParameterInspection */
         AbstractPlatform $platform
-    )
+    ): int
     {
         return 65;
     }
@@ -56,7 +56,7 @@ class FloatEnumType extends ScalarEnumType
     public function getDecimalPrecision(
         /** @noinspection PhpUnusedParameterInspection */
         AbstractPlatform $platform
-    )
+    ): int
     {
         return 30;
     }
@@ -68,7 +68,7 @@ class FloatEnumType extends ScalarEnumType
      * @return FloatEnum
      * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
      */
-    protected function convertToEnum($enumValue)
+    protected function convertToEnum($enumValue): FloatEnum
     {
         return parent::convertToEnum($this->toFloat($enumValue));
     }
@@ -78,7 +78,7 @@ class FloatEnumType extends ScalarEnumType
      * @return float
      * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
      */
-    protected function toFloat($value)
+    protected function toFloat($value): float
     {
         try {
             // Uses side effect of the conversion - the checks

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1); // on PHP 7+ are standard PHP methods strict to types of given parameters
+
 namespace Doctrineum\Tests\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -127,7 +129,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     }
 
     /**
-     * @return \Doctrineum\Float\FloatEnum
+     * @return \Doctrineum\Float\FloatEnum|string
      */
     protected function getRegisteredEnumClass()
     {
@@ -426,7 +428,7 @@ class TestAnotherFloatEnumType extends FloatEnumType
 {
     const TEST_ANOTHER_FLOAT_ENUM = 'test_another_float_enum';
 
-    public function getName()
+    public function getName(): string
     {
         return self::TEST_ANOTHER_FLOAT_ENUM;
     }

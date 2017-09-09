@@ -17,7 +17,7 @@ class FloatEnum extends ScalarEnum implements FloatEnumInterface
      * @return float
      * @throws \Doctrineum\Float\Exceptions\WrongValueForFloatEnum
      */
-    protected static function convertToEnumFinalValue($value)
+    protected static function convertToEnumFinalValue($value): float
     {
         try {
             return ToFloat::toFloat($value, true /* strict */);
