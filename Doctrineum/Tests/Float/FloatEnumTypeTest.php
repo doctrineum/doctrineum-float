@@ -13,7 +13,7 @@ use Doctrineum\Tests\SelfRegisteringType\AbstractSelfRegisteringTypeTest;
 
 class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $enumType = Type::getType($this->getExpectedTypeName());
         /** @var FloatEnumType $enumType */
@@ -29,16 +29,10 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
 
     /**
      * @test
+     * @return FloatEnumType
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function I_can_register_it()
-    {
-        parent::I_can_register_it();
-    }
-
-    /**
-     * @test
-     */
-    public function I_can_get_instance()
+    public function I_can_get_instance(): FloatEnumType
     {
         return parent::I_can_get_instance();
     }
@@ -48,7 +42,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function sql_declaration_is_valid(FloatEnumType $enumType)
+    public function sql_declaration_is_valid(FloatEnumType $enumType): void
     {
         $sql = $enumType->getSQLDeclaration([], $this->getAbstractPlatform());
         $defaultLength = $enumType->getDefaultLength($this->getAbstractPlatform());
@@ -59,7 +53,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     /**
      * @return AbstractPlatform|\Mockery\MockInterface
      */
-    private function getAbstractPlatform()
+    private function getAbstractPlatform(): AbstractPlatform
     {
         return $this->mockery(AbstractPlatform::class);
     }
@@ -69,7 +63,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function sql_default_length_is_sixty_five(FloatEnumType $enumType)
+    public function sql_default_length_is_sixty_five(FloatEnumType $enumType): void
     {
         $defaultLength = $enumType->getDefaultLength($this->getAbstractPlatform());
         self::assertSame(65, $defaultLength);
@@ -80,7 +74,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function sql_decimal_precision_is_thirty(FloatEnumType $enumType)
+    public function sql_decimal_precision_is_thirty(FloatEnumType $enumType): void
     {
         $defaultLength = $enumType->getDecimalPrecision($this->getAbstractPlatform());
         self::assertSame(30, $defaultLength);
@@ -91,7 +85,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function enum_as_database_value_is_float_value_of_that_enum(FloatEnumType $enumType)
+    public function enum_as_database_value_is_float_value_of_that_enum(FloatEnumType $enumType): void
     {
         $enum = $this->createEnum($value = 12345.67859);
         self::assertSame($value, $enumType->convertToDatabaseValue($enum, $this->getAbstractPlatform()));
@@ -101,7 +95,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @param $value
      * @return \Mockery\MockInterface|ScalarEnumInterface
      */
-    private function createEnum($value)
+    private function createEnum($value): ScalarEnumInterface
     {
         $enum = $this->mockery(ScalarEnumInterface::class);
         $enum->shouldReceive('getValue')
@@ -120,12 +114,12 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
+    public function float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType): void
     {
         $enum = $enumType->convertToPHPValue($float = 12345.67859, $this->getAbstractPlatform());
         self::assertInstanceOf($this->getRegisteredEnumClass(), $enum);
         self::assertSame($float, $enum->getValue());
-        self::assertSame("$float", (string)$enum);
+        self::assertSame((string)$float, (string)$enum);
     }
 
     /**
@@ -141,7 +135,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function string_float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType)
+    public function string_float_to_php_value_gives_enum_with_that_float(FloatEnumType $enumType): void
     {
         $value = $enumType->convertToPHPValue($stringFloat = '12345.67859', $this->getAbstractPlatform());
         self::assertInstanceOf($this->getRegisteredEnumClass(), $value);
@@ -160,7 +154,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         $enumType->convertToPHPValue($nonNumericValue, $this->getAbstractPlatform());
     }
 
-    public function provideNonNumericNonNullValue()
+    public function provideNonNumericNonNullValue(): array
     {
         return [
             [''],
@@ -176,7 +170,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     /**
      * @test
      */
-    public function I_get_null_if_fetched_from_database()
+    public function I_get_null_if_fetched_from_database(): void
     {
         $enumType = Type::getType($this->getExpectedTypeName());
         self::assertNull($enumType->convertToPHPValue(null, $this->getAbstractPlatform()));
@@ -187,7 +181,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
+    public function integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType): void
     {
         $enum = $enumType->convertToPHPValue($integer = 12345, $this->getAbstractPlatform());
         self::assertInstanceOf($this->getRegisteredEnumClass(), $enum);
@@ -201,7 +195,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function zero_integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType)
+    public function zero_integer_to_php_value_gives_enum_with_float(FloatEnumType $enumType): void
     {
         $enum = $enumType->convertToPHPValue($zeroInteger = 0, $this->getAbstractPlatform());
         self::assertInstanceOf($this->getRegisteredEnumClass(), $enum);
@@ -215,7 +209,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function false_to_php_value_is_zero(FloatEnumType $enumType)
+    public function false_to_php_value_is_zero(FloatEnumType $enumType): void
     {
         $enum = $enumType->convertToPHPValue($false = false, $this->getAbstractPlatform());
         self::assertSame(0.0, $enum->getValue());
@@ -246,7 +240,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends I_can_get_instance
      */
-    public function can_register_subtype(FloatEnumType $enumType)
+    public function can_register_subtype(FloatEnumType $enumType): FloatEnumType
     {
         self::assertTrue($enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~'));
         self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
@@ -259,7 +253,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends can_register_subtype
      */
-    public function can_unregister_subtype(FloatEnumType $enumType)
+    public function can_unregister_subtype(FloatEnumType $enumType): void
     {
         /**
          * The subtype is unregistered because of tearDown clean up
@@ -277,14 +271,14 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends can_register_subtype
      */
-    public function subtype_returns_proper_enum(FloatEnumType $enumType)
+    public function subtype_returns_proper_enum(FloatEnumType $enumType): void
     {
         $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, $regexp = '~45.6~');
         self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
         /** @var AbstractPlatform $abstractPlatform */
         $abstractPlatform = $this->mockery(AbstractPlatform::class);
         $matchingValueToConvert = 12345.6789;
-        self::assertRegExp($regexp, "$matchingValueToConvert");
+        self::assertRegExp($regexp, (string)$matchingValueToConvert);
         /**
          * Used TestSubtype returns as an "enum" the given value, which is $valueToConvert in this case,
          *
@@ -292,7 +286,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
          */
         $enumFromSubType = $enumType->convertToPHPValue($matchingValueToConvert, $abstractPlatform);
         self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumFromSubType);
-        self::assertSame("$matchingValueToConvert", "$enumFromSubType");
+        self::assertSame((string)$matchingValueToConvert, (string)$enumFromSubType);
     }
 
     /**
@@ -300,14 +294,14 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @test
      * @depends can_register_subtype
      */
-    public function default_enum_is_given_if_subtype_does_not_match(FloatEnumType $enumType)
+    public function default_enum_is_given_if_subtype_does_not_match(FloatEnumType $enumType): void
     {
         $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, $regexp = '~45.6~');
         self::assertTrue($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
         /** @var AbstractPlatform $abstractPlatform */
         $abstractPlatform = $this->mockery(AbstractPlatform::class);
         $nonMatchingValueToConvert = 9999.9999;
-        self::assertNotRegExp($regexp, "$nonMatchingValueToConvert");
+        self::assertNotRegExp($regexp, (string)$nonMatchingValueToConvert);
         /**
          * Used TestSubtype returns as an "enum" the given value, which is $valueToConvert in this case,
          *
@@ -316,7 +310,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         $enum = $enumType->convertToPHPValue($nonMatchingValueToConvert, $abstractPlatform);
         self::assertNotSame($nonMatchingValueToConvert, $enum);
         self::assertInstanceOf(FloatEnumInterface::class, $enum);
-        self::assertSame("$nonMatchingValueToConvert", (string)$enum);
+        self::assertSame((string)$nonMatchingValueToConvert, (string)$enum);
     }
 
     /**
@@ -325,7 +319,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumIsAlreadyRegistered
      */
-    public function registering_same_subtype_again_throws_exception(FloatEnumType $enumType)
+    public function registering_same_subtype_again_throws_exception(FloatEnumType $enumType): void
     {
         self::assertFalse($enumType::hasSubTypeEnum(TestSubTypeFloatEnum::class));
         self::assertTrue($enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, '~foo~'));
@@ -339,7 +333,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumClassNotFound
      */
-    public function registering_non_existing_subtype_class_throws_exception(FloatEnumType $enumType)
+    public function registering_non_existing_subtype_class_throws_exception(FloatEnumType $enumType): void
     {
         $enumType::addSubTypeEnum('NonExistingClassName', '~foo~');
     }
@@ -350,7 +344,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @depends I_can_get_instance
      * @expectedException \Doctrineum\Scalar\Exceptions\SubTypeEnumHasToBeEnum
      */
-    public function registering_subtype_class_without_proper_method_throws_exception(FloatEnumType $enumType)
+    public function registering_subtype_class_without_proper_method_throws_exception(FloatEnumType $enumType): void
     {
         $enumType::addSubTypeEnum(\stdClass::class, '~foo~');
     }
@@ -362,7 +356,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
      * @expectedException \Doctrineum\Scalar\Exceptions\InvalidRegexpFormat
      * @expectedExceptionMessage The given regexp is not enclosed by same delimiters and therefore is not valid: 'foo~'
      */
-    public function registering_subtype_with_invalid_regexp_throws_exception(FloatEnumType $enumType)
+    public function registering_subtype_with_invalid_regexp_throws_exception(FloatEnumType $enumType): void
     {
         $enumType::addSubTypeEnum(TestSubTypeFloatEnum::class, 'foo~' /* missing opening delimiter */);
     }
@@ -370,7 +364,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     /**
      * @test
      */
-    public function different_types_with_same_subtype_regexp_distinguish_them()
+    public function different_types_with_same_subtype_regexp_distinguish_them(): void
     {
         /** @var FloatEnumType $enumTypeClass */
         $enumTypeClass = $this->getTypeClass();
@@ -387,7 +381,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         TestAnotherFloatEnumType::addSubTypeEnum(TestAnotherSubTypeFloatEnum::class, $regexp);
 
         $value = 345.678;
-        self::assertRegExp($regexp, "$value");
+        self::assertRegExp($regexp, (string)$value);
 
         $enumType = Type::getType($this->getExpectedTypeName());
         $enumSubType = $enumType->convertToPHPValue($value, $this->getPlatform());
@@ -397,7 +391,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         $anotherEnumType = Type::getType($this->getExpectedTypeName(TestAnotherFloatEnumType::class));
         $anotherEnumSubType = $anotherEnumType->convertToPHPValue($value, $this->getPlatform());
         self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumSubType);
-        self::assertSame("$value", "$anotherEnumSubType");
+        self::assertSame((string)$value, (string)$anotherEnumSubType);
 
         // registered sub-types are different, although regexp is the same - let's test if they are kept separately
         self::assertNotSame($enumSubType, $anotherEnumSubType);
@@ -426,7 +420,7 @@ class TestAnotherSubTypeFloatEnum extends FloatEnum
 
 class TestAnotherFloatEnumType extends FloatEnumType
 {
-    const TEST_ANOTHER_FLOAT_ENUM = 'test_another_float_enum';
+    public const TEST_ANOTHER_FLOAT_ENUM = 'test_another_float_enum';
 
     public function getName(): string
     {

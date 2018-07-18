@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Doctrineum\Float;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -12,7 +14,7 @@ use Granam\Float\Tools\ToFloat;
  */
 class FloatEnumType extends ScalarEnumType
 {
-    const FLOAT_ENUM = 'float_enum';
+    public const FLOAT_ENUM = 'float_enum';
 
     public function getName(): string
     {
@@ -68,7 +70,7 @@ class FloatEnumType extends ScalarEnumType
      * @return FloatEnum
      * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
      */
-    protected function convertToEnum($enumValue): FloatEnum
+    protected function convertToEnum($enumValue): ScalarEnumInterface
     {
         return parent::convertToEnum($this->toFloat($enumValue));
     }
@@ -82,7 +84,7 @@ class FloatEnumType extends ScalarEnumType
     {
         try {
             // Uses side effect of the conversion - the checks
-            return ToFloat::tofloat($value, true /* strict */);
+            return ToFloat::toFloat($value, true /* strict */);
         } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
             // wrapping exception by a local one
             throw new Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
