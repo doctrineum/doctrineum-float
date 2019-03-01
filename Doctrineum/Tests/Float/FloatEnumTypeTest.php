@@ -145,7 +145,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
     /**
      * @param $nonNumericValue
      * @test
-     * @expectedException \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
+     * @expectedException \Granam\FloatEnum\Exceptions\WrongValueForFloatEnum
      * @dataProvider provideNonNumericNonNullValue
      */
     public function I_can_not_convert_non_numeric_to_enum_value($nonNumericValue)
@@ -386,7 +386,7 @@ class FloatEnumTypeTest extends AbstractSelfRegisteringTypeTest
         $enumType = Type::getType($this->getExpectedTypeName());
         $enumSubType = $enumType->convertToPHPValue($value, $this->getPlatform());
         self::assertInstanceOf(TestSubTypeFloatEnum::class, $enumSubType);
-        self::assertSame("$value", "$enumSubType");
+        self::assertSame((string)$value, (string)$enumSubType);
 
         $anotherEnumType = Type::getType($this->getExpectedTypeName(TestAnotherFloatEnumType::class));
         $anotherEnumSubType = $anotherEnumType->convertToPHPValue($value, $this->getPlatform());

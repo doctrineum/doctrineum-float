@@ -2,9 +2,8 @@
 namespace Doctrineum\Float;
 
 use Doctrineum\Scalar\ScalarEnumInterface;
-use Granam\Float\FloatInterface;
 
-interface FloatEnumInterface extends FloatInterface, ScalarEnumInterface
+interface FloatEnumInterface extends \Granam\FloatEnum\FloatEnumInterface, ScalarEnumInterface
 {
 
 }

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrineum\Scalar\ScalarEnumInterface;
 use Doctrineum\Scalar\ScalarEnumType;
 use Granam\Float\Tools\ToFloat;
+use Granam\FloatEnum\Exceptions\WrongValueForFloatEnum;
 
 /**
  * @method float convertToDatabaseValue(ScalarEnumInterface $enumValue, AbstractPlatform $platform)
@@ -68,7 +69,7 @@ class FloatEnumType extends ScalarEnumType
      *
      * @param string $enumValue
      * @return FloatEnum
-     * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
+     * @throws \Granam\FloatEnum\Exceptions\WrongValueForFloatEnum
      */
     protected function convertToEnum($enumValue): ScalarEnumInterface
     {
@@ -78,7 +79,7 @@ class FloatEnumType extends ScalarEnumType
     /**
      * @param mixed $value
      * @return float
-     * @throws \Doctrineum\Float\Exceptions\UnexpectedValueToConvert
+     * @throws \\Granam\FloatEnum\Exceptions\WrongValueForFloatEnum
      */
     protected function toFloat($value): float
     {
@@ -87,7 +88,7 @@ class FloatEnumType extends ScalarEnumType
             return ToFloat::toFloat($value, true /* strict */);
         } catch (\Granam\Float\Tools\Exceptions\WrongParameterType $exception) {
             // wrapping exception by a local one
-            throw new Exceptions\UnexpectedValueToConvert($exception->getMessage(), $exception->getCode(), $exception);
+            throw new WrongValueForFloatEnum($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }
